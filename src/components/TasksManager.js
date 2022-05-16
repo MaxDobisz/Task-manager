@@ -1,4 +1,5 @@
 import React from 'react';
+import ToHHMMSS from './ToHHMMSS';
 
 class TasksManager extends React.Component {
     apiUrl = 'http://localhost:3005/data'
@@ -24,6 +25,7 @@ class TasksManager extends React.Component {
     }
 
     componentDidMount() {
+        window.addEventListener("beforeunload", this.onUnload);
         fetch(this.apiUrl)
             .then(resp => resp.json())
             .then(resp => this.setState({tasks: resp}))
@@ -31,7 +33,16 @@ class TasksManager extends React.Component {
     }
 
     componentWillUnmount() {
-       clearInterval(this.idTime)
+        this.clearTimer();
+        window.removeEventListener("beforeunload", this.onUnload);
+    }
+
+    onUnload = e => { 
+        e.preventDefault();
+        const tasks = [...this.state.tasks];
+        const runningTask = tasks.find(task => task.isRunning === true);
+        const stopedTask = {...runningTask, isRunning: false};
+        this.updateData(stopedTask);
     }
 
     onSubmit = (e) => {
@@ -52,7 +63,7 @@ class TasksManager extends React.Component {
                 this.setState({tasks: newTasks});
             })
             .catch(err => console.log(err))
-            .finally(() => this.clearInput())
+            .finally(() => this.clearInput());
     }
 
     createTask() {
@@ -63,15 +74,15 @@ class TasksManager extends React.Component {
     }
 
     clearInput() {
-        this.setState({task: ''})
+        this.setState({task: ''});
     }
 
     inputChange = e => this.setState({task: e.target.value});
         
     renderTasks() {
-        const {tasks} = this.state
+        const {tasks} = this.state;
         if(tasks) {
-            const sortedTasks = this.sortTasks()
+            const sortedTasks = this.sortTasks();
 
             return sortedTasks.map((task) => {
                 return (
@@ -79,11 +90,13 @@ class TasksManager extends React.Component {
                         <section className='item__section'>
                             <header className='item__header'>
                                 <h2 className='item__title'>{task.name}</h2>
-                                <div className='item__timer'>{this.toHHMMSS(task.time)}</div> 
+                                <div className='item__timer'>{ToHHMMSS(task.time)}</div> 
                             </header>
                             <footer className='item__footer'>
                                 <button className='item__button' disabled={this.disableStartStopButton(task)} onClick={() =>{this.startStopHandler(task)}}>{this.startStopToggle(task.isRunning)}</button>
-                                <button className='item__button' disabled={this.disableFinishButton(task.isDone)} onClick={() => {this.finishTaskHandler(task)}}>finish</button>
+                                <button className='item__button' disabled={this.disableFinishButton(task.isDone)} onClick={(e) => {
+
+                                    this.finishTaskHandler(task, e)}}>finish</button>
                                 <button className='item__button' disabled={this.disableRemoveButton(task.isDone)} onClick={() => {this.removeTaskHandler(task)}}>remove</button>
                             </footer>
                         </section>
@@ -97,31 +110,14 @@ class TasksManager extends React.Component {
         const {tasks} = this.state;
         const unremovedTasks = tasks.filter(task => task.isRemoved === false);
         const sortedTasks = unremovedTasks.sort((a, b) => {
-                if(!a.isDone && b.isDone) {
-                    return -1;
-                }
+            if (!a.finishTime && b.finishTime) {
+                return -1;
+            }
+
+            return   a.finishTime-b.finishTime;
         });
 
         return sortedTasks;
-    }
-
-    toHHMMSS (time) {
-        var sec_num = parseInt(time, 10);
-        var hours = Math.floor(sec_num / 3600);
-        var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-        var seconds = sec_num - (hours * 3600) - (minutes * 60);
-    
-        if(hours < 10) {
-            hours = "0" + hours;
-        }
-        if(minutes < 10) {
-            minutes = "0" + minutes;
-        }
-        if(seconds < 10) {
-            seconds = "0" + seconds;
-        }
-
-        return `${hours}:${minutes}:${seconds}`;
     }
 
     disableStartStopButton(task) {
@@ -136,7 +132,6 @@ class TasksManager extends React.Component {
         if(!this.idTime) {
             this.idTime = setInterval(()=>{this.incrementTime(task.id)}, 1000);
         } else {
-            clearInterval(this.idTime);
             this.clearTimer();
             const tasks = [...this.state.tasks];
             const newTasks = tasks.map(item=> {
@@ -186,15 +181,15 @@ class TasksManager extends React.Component {
         return false;
     }
 
-    finishTaskHandler(task) {
+    finishTaskHandler(task, event) {
         if (task.isRunning === true) {
-            clearInterval(this.idTime);
+            this.clearTimer();
         }
         
         this.setState(state => {
             const newTasks = state.tasks.map(item=> {
                 if(task.id === item.id) {
-                    const updatedTask = {...item, isRunning: false, isDone: true}
+                    const updatedTask = {...item, isRunning: false, isDone: true, finishTime: event.timeStamp}
                     this.updateData(updatedTask);
 
                     return updatedTask;
@@ -246,6 +241,7 @@ class TasksManager extends React.Component {
     }
 
     clearTimer() {
+        clearInterval(this.idTime);
         this.idTime = '';
     }
 }
