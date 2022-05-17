@@ -1,5 +1,5 @@
 import React from 'react';
-import ToHHMMSS from './ToHHMMSS';
+import Timer from './Timer';
 
 class TasksManager extends React.Component {
     apiUrl = 'http://localhost:3005/data'
@@ -90,7 +90,7 @@ class TasksManager extends React.Component {
                         <section className='item__section'>
                             <header className='item__header'>
                                 <h2 className='item__title'>{task.name}</h2>
-                                <div className='item__timer'>{ToHHMMSS(task.time)}</div> 
+                                <Timer time= {task.time}/>
                             </header>
                             <footer className='item__footer'>
                                 <button className='item__button' disabled={this.disableStartStopButton(task)} onClick={() =>{this.startStopHandler(task)}}>{this.startStopToggle(task.isRunning)}</button>
