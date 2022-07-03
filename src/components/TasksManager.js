@@ -209,7 +209,7 @@ class TasksManager extends React.Component {
         const {id} = task;
         const options = {
             method:'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(task)
         }
 
