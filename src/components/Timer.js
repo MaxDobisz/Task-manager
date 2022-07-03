@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 class Timer extends React.Component {
     toHHMMSS() {
         const {time} = this.props;
-        
         var sec_num = parseInt(time, 10);
         var hours = Math.floor(sec_num / 3600);
         var minutes = Math.floor((sec_num - (hours * 3600)) / 60);

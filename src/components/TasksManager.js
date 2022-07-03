@@ -2,7 +2,7 @@ import React from 'react';
 import Timer from './Timer';
 
 class TasksManager extends React.Component {
-    apiUrl = 'http://localhost:3005/data'
+    apiUrl = 'http://localhost:3005/data';
     idTime = null;
     state = {
         tasks: null,
@@ -11,7 +11,6 @@ class TasksManager extends React.Component {
 
     render() {
         const {task} = this.state;
-
         return (
             <div className='task-manager'>
                 <h1 className='task-manager__title'>TASK MANAGER</h1>
@@ -48,7 +47,6 @@ class TasksManager extends React.Component {
     onSubmit = (e) => {
         e.preventDefault();
         const task = this.createTask();
-
         const options = {
             method: 'POST',
             body: JSON.stringify(task),
@@ -69,7 +67,6 @@ class TasksManager extends React.Component {
     createTask() {
         const {task} = this.state;
         const data = {name: task, time: 0, isRunning: false, isDone: false, isRemoved: false};
-
         return data;
     }
 
@@ -83,7 +80,6 @@ class TasksManager extends React.Component {
         const {tasks} = this.state;
         if(tasks) {
             const sortedTasks = this.sortTasks();
-
             return sortedTasks.map((task) => {
                 return (
                     <li className='items-list__item'>
@@ -94,15 +90,13 @@ class TasksManager extends React.Component {
                             </header>
                             <footer className='item__footer'>
                                 <button className='item__button' disabled={this.disableStartStopButton(task)} onClick={() =>{this.startStopHandler(task)}}>{this.startStopToggle(task.isRunning)}</button>
-                                <button className='item__button' disabled={this.disableFinishButton(task.isDone)} onClick={(e) => {
-
-                                    this.finishTaskHandler(task, e)}}>finish</button>
+                                <button className='item__button' disabled={this.disableFinishButton(task.isDone)} onClick={(e) => {this.finishTaskHandler(task, e)}}>finish</button>
                                 <button className='item__button' disabled={this.disableRemoveButton(task.isDone)} onClick={() => {this.removeTaskHandler(task)}}>remove</button>
                             </footer>
                         </section>
                     </li>
-                )
-            })
+                );
+            });
         }
     }
 
@@ -113,10 +107,8 @@ class TasksManager extends React.Component {
             if (!a.finishTime && b.finishTime) {
                 return -1;
             }
-
             return   a.finishTime-b.finishTime;
         });
-
         return sortedTasks;
     }
 
@@ -124,7 +116,6 @@ class TasksManager extends React.Component {
         if(task.isDone || this.idTime && !task.isRunning) {
             return true;
         }
-
         return false;
     }
 
@@ -138,13 +129,10 @@ class TasksManager extends React.Component {
                 if(task.id === item.id) {
                     const updatedTask = {...item, time: task.time + 1, isRunning: false}
                     this.updateData(updatedTask);
-
                     return updatedTask;
                 }
-
                 return item;
             });
-
             this.setState({tasks: newTasks});
         }
     }
@@ -155,10 +143,8 @@ class TasksManager extends React.Component {
             if(task.id === taskId) {
                 const updatedTask = {...task, time: task.time + 1, isRunning: true};
                 this.updateData(updatedTask);
-
                 return updatedTask;
             }
-
             return task;
         });
 
@@ -169,7 +155,6 @@ class TasksManager extends React.Component {
         if(taskIsRunning && this.idTime) {
             return 'stop';
         }
-
         return 'start';
     }
 
@@ -177,7 +162,6 @@ class TasksManager extends React.Component {
         if(taskIsDone) {
             return true;
         } 
-
         return false;
     }
 
@@ -191,13 +175,10 @@ class TasksManager extends React.Component {
                 if(task.id === item.id) {
                     const updatedTask = {...item, isRunning: false, isDone: true, finishTime: event.timeStamp}
                     this.updateData(updatedTask);
-
                     return updatedTask;
                 }
-
                 return item;
             });
-
             return {
                 tasks: newTasks,
             }
@@ -208,7 +189,6 @@ class TasksManager extends React.Component {
         if(taskIsDone) {
             return false;
         } 
-
         return true;
     }
 
@@ -218,13 +198,10 @@ class TasksManager extends React.Component {
             if(task.id === item.id && task.isDone === true) {
                 const updatedTask = {...item, isRemoved: true};
                 this.updateData(updatedTask);
-
                 return updatedTask;
             }
-
             return item;
         });
-
         this.setState({tasks: newTasks});
     }
 
