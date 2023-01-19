@@ -2,7 +2,7 @@ import React from 'react';
 import Timer from './Timer';
 
 class TasksManager extends React.Component {
-    apiUrl = 'http://localhost:3005/data';
+    apiUrl = 'http://localhost:3000/data';
     idTime = null;
     state = {
         tasks: null,
@@ -82,7 +82,7 @@ class TasksManager extends React.Component {
             const sortedTasks = this.sortTasks();
             return sortedTasks.map((task) => {
                 return (
-                    <li className='items-list__item'>
+                    <li className='items-list__item' key={task.name}>
                         <section className='item__section'>
                             <header className='item__header'>
                                 <h2 className='item__title'>{task.name}</h2>
@@ -213,7 +213,7 @@ class TasksManager extends React.Component {
             body: JSON.stringify(task)
         }
 
-        fetch(`http://localhost:3005/data/${id}`, options)
+        fetch(`http://localhost:3000/data/${id}`, options)
             .catch(error => console.error(error));
     }
 

@@ -1,0 +1,52 @@
+{
+  "data": [
+    {
+      "name": "Data backup",
+      "time": 330,
+      "isRunning": false,
+      "isDone": false,
+      "isRemoved": false,
+      "id": 1
+    },
+    {
+      "name": "Skill learning",
+      "time": 9000,
+      "isRunning": false,
+      "isDone": false,
+      "isRemoved": false,
+      "id": 2
+    },
+    {
+      "name": "Blog writing",
+      "time": 4200,
+      "isRunning": false,
+      "isDone": false,
+      "isRemoved": false,
+      "id": 3
+    },
+    {
+      "name": "Budget planning",
+      "time": 0,
+      "isRunning": false,
+      "isDone": false,
+      "isRemoved": false,
+      "id": 4
+    },
+    {
+      "name": "Inbox cleanup",
+      "time": 1000,
+      "isRunning": false,
+      "isDone": false,
+      "isRemoved": false,
+      "id": 5
+    },
+    {
+      "name": "Contract review",
+      "time": 2500,
+      "isRunning": false,
+      "isDone": false,
+      "isRemoved": false,
+      "id": 6
+    }
+  ]
+}
