@@ -7,8 +7,10 @@ This is a task manager application built using React. It includes a timer featur
 - Finishing a task, moving it to the end of the list and making it non-restartable
 - Removing tasks, which removes them from the list but keeps them in the database as removed.
 
-
-![](./screenshots/app.png)|![](./screenshots/db.png)
+<div align="center">
+  <img src="./screenshots/app.png" style="width: 60%">
+  <img src="./screenshots/db.png" style="width: 30%">
+</div>
 
 
 ## Installation
