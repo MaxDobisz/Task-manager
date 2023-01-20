@@ -25,9 +25,9 @@ To run this application, you will need to have Node.js and npm (Node Package Man
 
             npm install
 
-- Install json-server globally
+- Install json-server
 
-            npm install json-server -g
+            npm install json-server
 
 - Start the JSON server by running
 
